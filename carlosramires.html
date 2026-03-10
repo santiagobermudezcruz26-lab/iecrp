@@ -1,0 +1,342 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buzón de Sugerencias | I.E Fray Manuel Alvarez</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background:linear-gradient(135deg,#0a3d62,#1a7709);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.container{
+  background:white;
+  width:100%;
+  max-width:520px;
+  padding:30px;
+  border-radius:18px;
+  box-shadow:0 12px 35px rgba(0,0,0,0.3);
+}
+
+h1,h2{text-align:center;}
+p{text-align:center;color:#444;font-size:14px;margin-bottom:25px;}
+
+button{
+  width:100%;
+  background:#0035ff;
+  color:white;
+  border:none;
+  padding:15px;
+  border-radius:10px;
+  font-size:18px;
+  cursor:pointer;
+  margin-bottom:10px;
+}
+
+button:disabled{background:#999;}
+button:hover:not(:disabled){background:#0a3d62;}
+
+.volver{
+  background:#6c757d;
+}
+
+.volver:hover{
+  background:#495057;
+}
+
+.hidden{display:none;}
+
+label{font-weight:600;display:block;margin-bottom:6px;}
+
+select, textarea{
+  width:100%;
+  padding:12px;
+  margin-bottom:18px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  font-size:16px;
+}
+
+textarea{resize:none;height:120px;}
+
+.sedes{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.sede{
+  border:2px solid #ccc;
+  padding:14px;
+  border-radius:12px;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.sede.active{
+  border-color:#1e90ff;
+  background:#f0f8ff;
+}
+
+.check{
+  color:#1e90ff;
+  font-size:20px;
+  display:none;
+}
+
+.sede.active .check{display:block;}
+
+.colors{
+  display:flex;
+  justify-content:space-around;
+  margin-bottom:22px;
+}
+
+.color-option{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  cursor:pointer;
+}
+
+.circle{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  border:2px solid #555;
+  margin-bottom:6px;
+}
+
+.green{background:#2ecc71;}
+.yellow{background:#f1c40f;}
+.red{background:#e74c3c;}
+
+input[type="radio"]{display:none;}
+
+input[type="radio"]:checked + .circle{
+  box-shadow:0 0 0 4px rgba(30,144,255,0.4);
+  transform:scale(1.15);
+}
+
+.footer{
+  text-align:center;
+  font-size:12px;
+  color:#777;
+  margin-top:18px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div id="inicio">
+  <h1>📩 Buzón de sugerencias<br>Contraloría 2026</h1>
+  <p>Hola querido estudiante 😁<br>Haz clic en continuar para enviar tu sugerencia.</p>
+  <button onclick="mostrarSedes()">Continuar</button>
+</div>
+
+<div id="sedes" class="hidden">
+  <h2>¿En qué sede estás? 🤔</h2>
+  <div class="sedes">
+    <div class="sede" onclick="seleccionarSede(this,'Sede Central')">Sede Central <span class="check">✓</span></div>
+    <div class="sede" onclick="seleccionarSede(this,'Sede Don Bosco')">Sede Don Bosco <span class="check">✓</span></div>
+    <div class="sede" onclick="seleccionarSede(this,'Sede La Monguí')">Sede La Monguí <span class="check">✓</span></div>
+    <div class="sede" onclick="seleccionarSede(this,'Sede Pombo')">Sede Pombo <span class="check">✓</span></div>
+  </div>
+  <button id="btnContinuar" onclick="mostrarJornada()" disabled>Continuar</button>
+  <button class="volver" onclick="volverInicio()">⬅ Volver</button>
+</div>
+
+<div id="jornada" class="hidden">
+  <h2>¿En qué jornada estás? ⏰</h2>
+  <div class="sedes">
+    <div class="sede" onclick="seleccionarJornada(this,'Jornada Mañana')">
+      🌅 Jornada Mañana <span class="check">✓</span>
+    </div>
+    <div class="sede" onclick="seleccionarJornada(this,'Jornada Tarde')">
+      🌇 Jornada Tarde <span class="check">✓</span>
+    </div>
+  </div>
+  <button id="btnContinuarJornada" onclick="mostrarFormulario()" disabled>
+    Continuar
+  </button>
+  <button class="volver" onclick="volverSedes()">⬅ Volver</button>
+</div>
+
+<div id="formulario" class="hidden">
+  <button class="volver" onclick="volverJornada()">⬅ Volver</button>
+
+<form action="https://formsubmit.co/contralorsantiago2026@gmail.com" method="POST">
+
+<input type="hidden" name="Sede" id="sedeInput">
+<input type="hidden" name="Jornada" id="jornadaInput">
+
+<input type="hidden" name="Latitud" id="latitud">
+<input type="hidden" name="Longitud" id="longitud">
+
+<input type="hidden" name="_captcha" value="false">
+<input type="hidden" name="_subject" value="Nueva sugerencia - Contraloría 2026">
+<input type="hidden" name="_template" value="table">
+<input type="hidden" name="_next" value="gracias.html">
+
+<label>Grado</label>
+<select name="Grado" id="gradoSelect" required>
+  <option value="">Selecciona tu grado</option>
+</select>
+
+<label>Tipo de mensaje</label>
+<div class="colors">
+  <label class="color-option">
+    <input type="radio" name="Nivel" value="Cosas buenas" required>
+    <span class="circle green"></span>
+    <span>Bueno</span>
+  </label>
+  <label class="color-option">
+    <input type="radio" name="Nivel" value="Puede mejorar">
+    <span class="circle yellow"></span>
+    <span>Mejorar</span>
+  </label>
+  <label class="color-option">
+    <input type="radio" name="Nivel" value="Situación delicada">
+    <span class="circle red"></span>
+    <span>Delicado</span>
+  </label>
+</div>
+
+<label>Motivo</label>
+<select name="Motivo" required>
+  <option value="">Selecciona una opción</option>
+  <option>Bullying</option>
+  <option>Comedor</option>
+  <option>Convivencia</option>
+  <option>Ideas o mejoras</option>
+</select>
+
+<label>Mensaje</label>
+<textarea name="Mensaje" placeholder="Escribe aquí tu mensaje..." required></textarea>
+
+<button type="submit">Enviar sugerencia</button>
+</form>
+</div>
+
+<div class="footer">
+I.E. Carlos Ramírez París – Cúcuta, Colombia © 2026
+</div>
+
+</div>
+
+<script>
+
+let sedeSeleccionada = "";
+let jornadaSeleccionada = "";
+
+function mostrarSedes(){
+  document.getElementById("inicio").classList.add("hidden");
+  document.getElementById("sedes").classList.remove("hidden");
+}
+
+function volverInicio(){
+  document.getElementById("sedes").classList.add("hidden");
+  document.getElementById("inicio").classList.remove("hidden");
+  resetSedes();
+}
+
+function volverSedes(){
+  document.getElementById("jornada").classList.add("hidden");
+  document.getElementById("sedes").classList.remove("hidden");
+  resetJornada();
+}
+
+function volverJornada(){
+  document.getElementById("formulario").classList.add("hidden");
+  document.getElementById("jornada").classList.remove("hidden");
+}
+
+function seleccionarSede(el, sede){
+  document.querySelectorAll("#sedes .sede").forEach(s=>s.classList.remove("active"));
+  el.classList.add("active");
+  sedeSeleccionada = sede;
+  document.getElementById("sedeInput").value = sede;
+  document.getElementById("btnContinuar").disabled = false;
+}
+
+function mostrarJornada(){
+  document.getElementById("sedes").classList.add("hidden");
+  document.getElementById("jornada").classList.remove("hidden");
+}
+
+function seleccionarJornada(el, jornada){
+  document.querySelectorAll("#jornada .sede").forEach(s=>s.classList.remove("active"));
+  el.classList.add("active");
+  jornadaSeleccionada = jornada;
+  document.getElementById("jornadaInput").value = jornada;
+  document.getElementById("btnContinuarJornada").disabled = false;
+}
+
+function mostrarFormulario(){
+  document.getElementById("jornada").classList.add("hidden");
+  document.getElementById("formulario").classList.remove("hidden");
+  actualizarGrados();
+}
+
+function actualizarGrados(){
+  const select = document.getElementById("gradoSelect");
+  select.innerHTML = '<option value="">Selecciona tu grado</option>';
+  let grados = [];
+
+  if(sedeSeleccionada === "Sede Central"){
+    if(jornadaSeleccionada === "Jornada Mañana"){
+      grados = ["Sexto","Séptimo","Octavo","Noveno","Décimo","Once"];
+    }
+    if(jornadaSeleccionada === "Jornada Tarde"){
+      grados = ["Primero","Segundo","Tercero","Cuarto","Quinto"];
+    }
+  }
+
+  grados.forEach(g=>{
+    const o = document.createElement("option");
+    o.value = g;
+    o.textContent = g;
+    select.appendChild(o);
+  });
+}
+
+function obtenerUbicacion(){
+
+if(navigator.geolocation){
+
+navigator.geolocation.getCurrentPosition(function(pos){
+
+let lat = pos.coords.latitude;
+let lon = pos.coords.longitude;
+
+document.getElementById("latitud").value = lat;
+document.getElementById("longitud").value = lon;
+
+console.log("Ubicación:",lat,lon);
+
+});
+
+}
+
+}
+
+obtenerUbicacion();
+
+</script>
+
+</body>
+</html>
+```
